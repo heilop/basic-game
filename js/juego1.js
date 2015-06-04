@@ -9,7 +9,7 @@ $(document).ready(function(){
 
         var open = true;
 
-        var player = {direction: "t",posX: 100, posY: 100, width: 15, height:15};
+        var player = {direction: "r",posX: 100, posY: 100, width: 15, height:15};
 
         function init(){
 
@@ -20,7 +20,25 @@ $(document).ready(function(){
             gameLoop = setInterval(game, 500);
         }
 
+        // KeyPress
+        $(document).keydown(function(event){
+            var key = event.which;
+            switch(key){
+                case 39:
+                    player.direction = "r";
+                    break;
+                case 37:
+                    player.direction = "l";
+                    break;
+                case 38:
+                    player.direction = "u";
+                    break;
+                case 40:
+                    player.direction = "d";
+                    break;
 
+            }
+        })
 
         function game(){
             setBackground();
@@ -101,7 +119,7 @@ $(document).ready(function(){
                 case "l":
                     player.posX -= 10;
                     break;
-                case "t":
+                case "u":
                     player.posY -= 10;
                     break;
                 case "d":

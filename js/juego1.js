@@ -5,8 +5,22 @@ $(document).ready(function(){
         var cHeight = $("#canvas").height();
         var ctx = canvas.getContext("2d");
 
+        var img = new Image();
+
+        var open = true;
         //
 
+        if(typeof gameLoop != "undefined") {
+            clearInterval(gameLoop);
+        }
+
+        // Create interval
+        gameLoop = setInterval(game, 800);
+
+        function game(){
+            setBackground();
+            pacmanAnimation();
+        }
         function setBackground(){
             ctx.save();
             // backgroud canvas.
@@ -26,30 +40,51 @@ $(document).ready(function(){
             ctx.restore();
         }
 
-        setBackground();
+        //setBackground();
 
         function degreesToRadian(degr){
             return (degr * Math.PI)/180;
         }
 
         //Drawing circles
-        ctx.beginPath();
-        ctx.arc(250, 175, 60, degreesToRadian(40), degreesToRadian(320));
-        ctx.lineTo(250, 175);
-        ctx.lineTo(297, 212);
-        ctx.closePath();
+        function pacmanAnimation(){
+            ctx.save();
+            ctx.beginPath();
 
-        ctx.fillStyle = "yellow";
-        ctx.fill();
+            // Is not open
+            if(!open){
+                ctx.arc(250, 175, 60, degreesToRadian(40), degreesToRadian(320));
+                ctx.lineTo(250, 175);
+                ctx.lineTo(297, 212);
+                open = true;
+            }else{
+                ctx.arc(250, 175, 60, degreesToRadian(0), degreesToRadian(360));
+                ctx.lineTo(250, 175);
+                open = false;
+            }
 
-        ctx.lineWidth =2;
-        ctx.strokeStyle = "black";
-        ctx.stroke();
+            ctx.closePath();
 
-        ctx.fillStyle = "black";
-        ctx.beginPath();
-        ctx.arc(242, 145, 10, degreesToRadian(0), degreesToRadian(360));
-        ctx.closePath();
-        ctx.fill();
+            ctx.fillStyle = "yellow";
+            ctx.fill();
+
+            ctx.lineWidth =2;
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(242, 145, 10, degreesToRadian(0), degreesToRadian(360));
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        /*
+        img.onload = function(){
+          ctx.drawImage(img, 10, 20);
+        }
+        img.src = "http://heilop.com/sites/default/files/heilop-logo.png";
+        */
+
     }
 )

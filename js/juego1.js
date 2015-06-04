@@ -5,21 +5,28 @@ $(document).ready(function(){
         var cHeight = $("#canvas").height();
         var ctx = canvas.getContext("2d");
 
-        var img = new Image();
+        //var img = new Image();
 
         var open = true;
-        //
 
-        if(typeof gameLoop != "undefined") {
-            clearInterval(gameLoop);
+        var player = {direction: "t",posX: 100, posY: 100, width: 15, height:15};
+
+        function init(){
+
+            if(typeof gameLoop != "undefined") {
+                clearInterval(gameLoop);
+            }
+            // Create interval
+            gameLoop = setInterval(game, 500);
         }
 
-        // Create interval
-        gameLoop = setInterval(game, 800);
+
 
         function game(){
             setBackground();
-            pacmanAnimation();
+            //pacmanAnimation();
+            movePlayer();
+            drawPlayer();
         }
         function setBackground(){
             ctx.save();
@@ -40,7 +47,7 @@ $(document).ready(function(){
             ctx.restore();
         }
 
-        //setBackground();
+        game();
 
         function degreesToRadian(degr){
             return (degr * Math.PI)/180;
@@ -79,6 +86,35 @@ $(document).ready(function(){
             ctx.fill();
         }
 
+        function drawPlayer(){
+            ctx.save();
+            ctx.fillStyle = "blue";
+            ctx.fillRect(player.posX, player.posY, player.width, player.height);
+            ctx.restore();
+        }
+
+        function movePlayer(){
+            switch(player.direction){
+                case "r":
+                    player.posX += 10;
+                    break;
+                case "l":
+                    player.posX -= 10;
+                    break;
+                case "t":
+                    player.posY -= 10;
+                    break;
+                case "d":
+                    player.posY += 10;
+                    break;
+                default:
+                    player.posX = player.posX;
+                    player.posY = player.posY;
+            }
+
+        }
+
+        init();
         /*
         img.onload = function(){
           ctx.drawImage(img, 10, 20);

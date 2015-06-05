@@ -10,10 +10,16 @@ $(document).ready(function(){
         var open = true;
 
         var player = {direction: "r",posX: 100, posY: 300, width: 15, height:15};
+        var coin = {draw:false, posX: 200, posY: 200, width: 10, height: 10};
 
+        /*
+         * Function init().
+         * Initial settings for run game.
+         */
         function init(){
-
+            // Chek if exist a game loop.
             if(typeof gameLoop != "undefined") {
+                // Clear interval
                 clearInterval(gameLoop);
             }
             // Create interval
@@ -40,25 +46,39 @@ $(document).ready(function(){
             }
         })
 
+        /*
+         * Function game().
+         * Call other functions.
+         */
         function game(){
             setBackground();
+            borderCollision();
             //pacmanAnimation();
             movePlayer();
             drawPlayer();
-            borderCollision();
         }
+
+        /*
+         * Function setBackground().
+         * Draw canvas background.
+         */
         function setBackground(){
+            //Save context.
             ctx.save();
-            // backgroud canvas.
+            // Set fill color.
             ctx.fillStyle = "white";
             ctx.fillRect(0, 0, cWidth, cHeight);
-            //
+            // Set stroke color.
             ctx.strokeStyle = "black";
             //ctx.lineWidth = 5;
             ctx.strokeRect(0, 0, cWidth, cHeight);
             ctx.restore();
         }
 
+        /*
+         * Function setPlayer().
+         * Use to create a player with settings.
+         */
         function setPlayer(color, x, y, width, height){
             ctx.save();
             ctx.fillStyle = color;
@@ -66,18 +86,27 @@ $(document).ready(function(){
             ctx.restore();
         }
 
+        // Call functions.
         game();
 
+        /*
+         * Function degreesToRadian().
+         * Return Radians from grades.
+         */
         function degreesToRadian(degr){
             return (degr * Math.PI)/180;
         }
 
-        //Drawing circles
+        /*
+         * Function pacmanAnimation().
+         * Function to Animate a pacman.
+         */
         function pacmanAnimation(){
             ctx.save();
+            // Initializing path.
             ctx.beginPath();
 
-            // Is not open
+            // Is not open(mouth).
             if(!open){
                 ctx.arc(250, 175, 60, degreesToRadian(40), degreesToRadian(320));
                 ctx.lineTo(250, 175);
@@ -105,6 +134,10 @@ $(document).ready(function(){
             ctx.fill();
         }
 
+        /*
+         * Function drawPlayer().
+         * Draw player on the canvas.
+         */
         function drawPlayer(){
             ctx.save();
             ctx.fillStyle = "blue";
@@ -112,6 +145,10 @@ $(document).ready(function(){
             ctx.restore();
         }
 
+        /*
+         * Function movePlayer().
+         * Used to move player: up, down, right, left.
+         */
         function movePlayer(){
             switch(player.direction){
                 case "r":
@@ -133,28 +170,36 @@ $(document).ready(function(){
 
         }
 
+        /*
+        * Function borderCollision().
+        * Stop player when crash border.
+        */
         function borderCollision(){
-            if(player.posY < 5 && player.direction == "u"){
+            if(player.posY <= 5 && player.direction == "u"){
                 player.posY = 0;
                 player.direction = "s";
             }
-
-            if(player.posY > 330 && player.direction == "d"){
-                player.posY = 335;
-                player.direction = "s";
-            }
-
-            if(player.posX < 5 && player.direction == "l"){
+            else if(player.posX <= 5 && player.direction == "l"){
                 player.posX = 0;
                 player.direction = "s";
             }
-
-            if(player.posX > 478 && player.direction == "r"){
-                player.posX = 485;
+            else if(player.posY + player.height >= cHeight - 5 && player.direction == "d"){
+                player.posY = cHeight - player.height;
+                player.direction = "s";
+            }
+            else if(player.posX + player.width  >= cWidth -5 && player.direction == "r"){
+                player.posX = cWidth - player.width;
                 player.direction = "s";
             }
         }
 
+        function coinProbability(){
+            if(!coin.draw && Math.floor((Math.random()*50) +1) < 4){
+                coin.draw = true;
+            }
+        }
+
+        // Call functions.
         init();
         /*
         img.onload = function(){
@@ -164,6 +209,6 @@ $(document).ready(function(){
         */
 
 
-        //https://www.youtube.com/watch?v=jknKvSXolOg
+        //https://www.youtube.com/watch?v=eTTXr2trsMw
     }
 )

@@ -9,7 +9,7 @@ $(document).ready(function(){
 
         var open = true;
 
-        var player = {direction: "r",posX: 100, posY: 100, width: 15, height:15};
+        var player = {direction: "r",posX: 100, posY: 300, width: 15, height:15};
 
         function init(){
 
@@ -45,6 +45,7 @@ $(document).ready(function(){
             //pacmanAnimation();
             movePlayer();
             drawPlayer();
+            borderCollision();
         }
         function setBackground(){
             ctx.save();
@@ -132,6 +133,28 @@ $(document).ready(function(){
 
         }
 
+        function borderCollision(){
+            if(player.posY < 5 && player.direction == "u"){
+                player.posY = 0;
+                player.direction = "s";
+            }
+
+            if(player.posY > 330 && player.direction == "d"){
+                player.posY = 335;
+                player.direction = "s";
+            }
+
+            if(player.posX < 5 && player.direction == "l"){
+                player.posX = 0;
+                player.direction = "s";
+            }
+
+            if(player.posX > 478 && player.direction == "r"){
+                player.posX = 485;
+                player.direction = "s";
+            }
+        }
+
         init();
         /*
         img.onload = function(){
@@ -140,5 +163,7 @@ $(document).ready(function(){
         img.src = "http://heilop.com/sites/default/files/heilop-logo.png";
         */
 
+
+        //https://www.youtube.com/watch?v=jknKvSXolOg
     }
 )

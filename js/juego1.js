@@ -6,10 +6,10 @@ $(document).ready(function(){
         var ctx = canvas.getContext("2d");
 
         //var img = new Image();
-
+        var timer = 0;
         var open = true;
 
-        var player = {direction: "r",posX: 100, posY: 300, width: 15, height:15};
+        var player = {direction: "r", posX: 100, posY: 300, width: 15, height:15};
         var coin = {draw:false, posX: 200, posY: 200, width: 10, height: 10};
 
         /*
@@ -52,10 +52,13 @@ $(document).ready(function(){
          */
         function game(){
             setBackground();
+            coinTimer();
+            coinProbability();
             borderCollision();
             //pacmanAnimation();
             movePlayer();
             drawPlayer();
+            drawCoin();
         }
 
         /*
@@ -146,6 +149,25 @@ $(document).ready(function(){
         }
 
         /*
+         * Function drawCoin().
+         * Draw Coin on the canvas.
+         */
+        function drawCoin(){
+            if(coin.draw) {
+                ctx.save();
+                ctx.fillStyle = "yellow";
+                ctx.fillRect(coin.posX, coin.posY, coin.width, coin.height);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(coin.posX, coin.posY, coin.width, coin.height);
+                ctx.restore();
+                if(timer > 6){
+                    coin.draw = false;
+
+                }
+            }
+        }
+
+        /*
          * Function movePlayer().
          * Used to move player: up, down, right, left.
          */
@@ -199,6 +221,14 @@ $(document).ready(function(){
             }
         }
 
+
+        function coinTimer(){
+            if(coin.draw){
+                timer++;
+            }else{
+                timer = 0;
+            }
+        }
         // Call functions.
         init();
         /*

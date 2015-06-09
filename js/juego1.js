@@ -10,8 +10,16 @@ $(document).ready(function(){
         var open = true;
         var score = 0;
 
-        var player = {direction: "r", posX: (cWidth/2) - 7, posY: (cHeight/2) - 7, width: 15, height:15};
+        var player = {direction: "r", posX: (cWidth/2) - 7, posY: (cHeight/2) - 7, width: 15, height: 15};
         var coin = {draw:false, posX: 0, posY: 0, width: 10, height: 10};
+
+        // Enemy
+        var enemy = new Array(2);
+        numberOfEnemy = 1;
+
+        for(var i = 0; i < enemy.length; i++){
+            enemy[i] = {direction: "d", posX: 0, posY: 0, width: 30, height: 20};
+        }
 
         /*
          * Function init().
@@ -60,6 +68,7 @@ $(document).ready(function(){
             //pacmanAnimation();
             movePlayer();
             drawPlayer();
+            drawEnemy(numberOfEnemy);
             drawCoin();
             drawScore();
         }
@@ -147,6 +156,7 @@ $(document).ready(function(){
             ctx.fillStyle = "black";
             ctx.fillText(text, 10, 30);
         }
+
         /*
          * Function drawPlayer().
          * Draw player on the canvas.
@@ -158,6 +168,14 @@ $(document).ready(function(){
             ctx.restore();
         }
 
+        function drawEnemy(numberEnemy){
+            ctx.save();
+            for(var i = 0; i < numberEnemy; i++ ){
+                ctx.fillStyle = "red";
+                ctx.fillRect(enemy[i].posX, enemy[i].posY, enemy[i].width, enemy[i].height);
+            }
+            ctx.restore();
+        }
         /*
          * Function drawCoin().
          * Draw Coin on the canvas.

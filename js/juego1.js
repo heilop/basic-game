@@ -8,9 +8,10 @@ $(document).ready(function(){
         //var img = new Image();
         var timer = 0;
         var open = true;
+        var score = 0;
 
-        var player = {direction: "r", posX: 100, posY: 300, width: 15, height:15};
-        var coin = {draw:false, posX: 200, posY: 200, width: 10, height: 10};
+        var player = {direction: "r", posX: (cWidth/2) - 7, posY: (cHeight/2) - 7, width: 15, height:15};
+        var coin = {draw:false, posX: 0, posY: 0, width: 10, height: 10};
 
         /*
          * Function init().
@@ -23,7 +24,7 @@ $(document).ready(function(){
                 clearInterval(gameLoop);
             }
             // Create interval
-            gameLoop = setInterval(game, 500);
+            gameLoop = setInterval(game, 30);
         }
 
         // KeyPress
@@ -55,10 +56,12 @@ $(document).ready(function(){
             coinTimer();
             coinProbability();
             borderCollision();
+            coinCollision();
             //pacmanAnimation();
             movePlayer();
             drawPlayer();
             drawCoin();
+            drawScore();
         }
 
         /*
@@ -137,6 +140,13 @@ $(document).ready(function(){
             ctx.fill();
         }
 
+
+        function drawScore(){
+            var text = "Score: " + score;
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "black";
+            ctx.fillText(text, 10, 30);
+        }
         /*
          * Function drawPlayer().
          * Draw player on the canvas.
@@ -160,7 +170,7 @@ $(document).ready(function(){
                 ctx.strokeStyle = "black";
                 ctx.strokeRect(coin.posX, coin.posY, coin.width, coin.height);
                 ctx.restore();
-                if(timer > 6){
+                if(timer > 300){
                     coin.draw = false;
 
                 }
@@ -174,16 +184,16 @@ $(document).ready(function(){
         function movePlayer(){
             switch(player.direction){
                 case "r":
-                    player.posX += 10;
+                    player.posX += 3;
                     break;
                 case "l":
-                    player.posX -= 10;
+                    player.posX -= 3;
                     break;
                 case "u":
-                    player.posY -= 10;
+                    player.posY -= 3;
                     break;
                 case "d":
-                    player.posY += 10;
+                    player.posY += 3;
                     break;
                 default:
                     player.posX = player.posX;
@@ -215,8 +225,22 @@ $(document).ready(function(){
             }
         }
 
+        function coinCollision(){
+            if(coin.draw &&
+                player.posX + player.width > coin.posX &&
+                player.posX < coin.posX + coin.width &&
+                player.posY < coin.posY + coin.height &&
+                player.posY + player.height > coin.posY
+            ){
+                coin.draw = false;
+                score += 10;
+            }
+        }
+
         function coinProbability(){
-            if(!coin.draw && Math.floor((Math.random()*50) +1) < 4){
+            if(!coin.draw && Math.floor((Math.random()*400) +1) < 4){
+                coin.posX = Math.floor(Math.random()*(cWidth - coin.width));
+                coin.posY = Math.floor(Math.random()*(cHeight - coin.height));
                 coin.draw = true;
             }
         }

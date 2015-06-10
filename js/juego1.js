@@ -15,7 +15,7 @@ $(document).ready(function(){
 
         // Enemy
         var enemy = new Array(2);
-        numberOfEnemy = 1;
+        numberOfEnemies = 1;
 
         for(var i = 0; i < enemy.length; i++){
             enemy[i] = {direction: "d", posX: 0, posY: 0, width: 30, height: 20};
@@ -67,8 +67,9 @@ $(document).ready(function(){
             coinCollision();
             //pacmanAnimation();
             movePlayer();
+            moveEnemies();
             drawPlayer();
-            drawEnemy(numberOfEnemy);
+            drawEnemy(numberOfEnemies);
             drawCoin();
             drawScore();
         }
@@ -217,7 +218,32 @@ $(document).ready(function(){
                     player.posX = player.posX;
                     player.posY = player.posY;
             }
+        }
 
+        /*
+         * Function moveEnemies().
+         * Used to move Enemies: up, down.
+         */
+        function moveEnemies(){
+            for(var i = 0; i < numberOfEnemies; i++) {
+                switch(enemy[i].direction){
+/*                    case "r":
+                        enemy.posX += 3;
+                        break;
+                    case "l":
+                        enemy.posX -= 3;
+                        break;*/
+                    case "u":
+                        enemy[i].posY -= 3;
+                        break;
+                    case "d":
+                        enemy[i].posY += 3;
+                        break;
+                    default:
+                        enemy[i].posX = enemy[i].posX;
+                        enemy[i].posY = enemy[i].posY;
+                }
+            }
         }
 
         /*
@@ -225,6 +251,8 @@ $(document).ready(function(){
         * Stop player when crash border.
         */
         function borderCollision(){
+
+            //  Collision for Player.
             if(player.posY <= 5 && player.direction == "u"){
                 player.posY = 0;
                 player.direction = "s";
@@ -240,6 +268,20 @@ $(document).ready(function(){
             else if(player.posX + player.width  >= cWidth -5 && player.direction == "r"){
                 player.posX = cWidth - player.width;
                 player.direction = "s";
+            }
+
+            // Collision for Enemy.
+            for(var i = 0; i < numberOfEnemies; i++){
+                //  Collision for Player.
+                if(enemy[i].posY <= 5 && enemy[i].direction == "u"){
+                    enemy[i].posY = 0;
+                    enemy[i].direction = "d";
+                }
+
+                else if(enemy[i].posY + enemy[i].height >= cHeight - 5 && enemy[i].direction == "d"){
+                    enemy[i].posY = cHeight - enemy[i].height;
+                    enemy[i].direction = "u";
+                }
             }
         }
 
@@ -281,6 +323,6 @@ $(document).ready(function(){
         */
 
 
-        //https://www.youtube.com/watch?v=eTTXr2trsMw
+        //https://www.youtube.com/watch?v=xtXRHyruSbk
     }
 )

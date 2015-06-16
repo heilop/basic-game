@@ -7,18 +7,23 @@ $(document).ready(function(){
 
         //var img = new Image();
         var timer = 0;
-        var open = true;
         var score = 0;
+        // Mouth pacman is open.
+        var open = true;
 
         var player = {direction: "r", posX: (cWidth/2) - 7, posY: (cHeight/2) - 7, width: 15, height: 15};
         var coin = {draw:false, posX: 0, posY: 0, width: 10, height: 10};
 
         // Enemy
         var enemy = new Array(2);
-        numberOfEnemies = 1;
-
+        var numberOfEnemies = 0;
+        var spawEnemy = 10;
         for(var i = 0; i < enemy.length; i++){
-            enemy[i] = {direction: "d", posX: 0, posY: 0, width: 30, height: 20};
+            if((i % 2) ==  0) {
+                enemy[i] = {draw: false, velocity: 0, direction: "d", posX: 0, posY: 0, width: 30, height: 20};
+            }else{
+                enemy[i] = {draw: false, velocity: 0, direction: "d", posX: cWidth - 30, posY: cHeight - 20, width: 30, height: 20};
+            }
         }
 
         /*
@@ -65,11 +70,12 @@ $(document).ready(function(){
             coinProbability();
             borderCollision();
             coinCollision();
+            increaseEnemies();
             //pacmanAnimation();
             movePlayer();
             moveEnemies();
             drawPlayer();
-            drawEnemy(numberOfEnemies);
+            drawEnemies(numberOfEnemies);
             drawCoin();
             drawScore();
         }
@@ -169,11 +175,13 @@ $(document).ready(function(){
             ctx.restore();
         }
 
-        function drawEnemy(numberEnemy){
+        function drawEnemies(numberEnemy){
             ctx.save();
             for(var i = 0; i < numberEnemy; i++ ){
-                ctx.fillStyle = "red";
-                ctx.fillRect(enemy[i].posX, enemy[i].posY, enemy[i].width, enemy[i].height);
+                if(enemy[i].draw){
+                    ctx.fillStyle = "red";
+                    ctx.fillRect(enemy[i].posX, enemy[i].posY, enemy[i].width, enemy[i].height);
+                }
             }
             ctx.restore();
         }
@@ -193,6 +201,15 @@ $(document).ready(function(){
                     coin.draw = false;
 
                 }
+            }
+        }
+
+        function increaseEnemies() {
+            if (spawEnemy < score && numberOfEnemies < enemy.length) {
+                enemy[numberOfEnemies].velocity = Math.floor((Math.random() * 4) + 1);
+                enemy[numberOfEnemies].draw = true;
+                numberOfEnemies++;
+                spawEnemy += 10;
             }
         }
 
@@ -234,10 +251,10 @@ $(document).ready(function(){
                         enemy.posX -= 3;
                         break;*/
                     case "u":
-                        enemy[i].posY -= 3;
+                        enemy[i].posY -= enemy[i].velocity;
                         break;
                     case "d":
-                        enemy[i].posY += 3;
+                        enemy[i].posY += enemy[i].velocity;
                         break;
                     default:
                         enemy[i].posX = enemy[i].posX;
@@ -294,6 +311,11 @@ $(document).ready(function(){
             ){
                 coin.draw = false;
                 score += 10;
+
+                if(player.width < 30 && player.height < 30){
+                    player.width += 5;
+                    player.height  += 5;
+                }
             }
         }
 
@@ -323,6 +345,6 @@ $(document).ready(function(){
         */
 
 
-        //https://www.youtube.com/watch?v=xtXRHyruSbk
+        //https://www.youtube.com/watch?v=4gTzfVMRoTo
     }
 )

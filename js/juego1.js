@@ -26,6 +26,17 @@ $(document).ready(function(){
             }
         }
 
+        // Shots.
+        var shots = new Array(2);
+
+        for(var i = 0; i < shots.length; i++) {
+            if((i % 2) == 0){
+                shots[i] = {draw: false, direction: "r", timer: 0, velocity: 8, posX: 0, posY: 0, width: 20, height: 5}
+            }else{
+                shots[i] = {draw: false, direction: "l", timer: 0, velocity: 8, posX: 0, posY: 0, width: 20, height: 5}
+            }
+        }
+
         /*
          * Function init().
          * Initial settings for run game.
@@ -71,6 +82,7 @@ $(document).ready(function(){
             borderCollision();
             coinCollision();
             increaseEnemies();
+            shooter();
             //pacmanAnimation();
             movePlayer();
             moveEnemies();
@@ -205,7 +217,7 @@ $(document).ready(function(){
         }
 
         function increaseEnemies() {
-            if (spawEnemy < score && numberOfEnemies < enemy.length) {
+            if (/*spawEnemy < score && */numberOfEnemies < enemy.length) {
                 enemy[numberOfEnemies].velocity = Math.floor((Math.random() * 4) + 1);
                 enemy[numberOfEnemies].draw = true;
                 numberOfEnemies++;
@@ -335,6 +347,20 @@ $(document).ready(function(){
                 timer = 0;
             }
         }
+
+        function shooter(){
+            for(var i = 0; i < shots.length; i++) {
+                if (enemy[i].draw){
+                    shots[i].timer++;
+
+                    if(shots[i].timer > 100) {
+                        shots[i].timer = 0;
+                        console.log("Disparo!!");
+                    }
+                }
+            }
+        }
+
         // Call functions.
         init();
         /*
@@ -345,6 +371,6 @@ $(document).ready(function(){
         */
 
 
-        //https://www.youtube.com/watch?v=4gTzfVMRoTo
+        //https://www.youtube.com/watch?v=7BS9yzjqDFI
     }
 )
